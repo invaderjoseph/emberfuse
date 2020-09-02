@@ -5,7 +5,7 @@
  *
  * @author   Thavarshan Thayananthajothy <tjthavarshan@gmail.com>
  */
-require __DIR__ . '/../vendor/autoload.php';
+require dirname(__DIR__) . '/vendor/autoload.php';
 
 /**
  * Bootstrap Emberfuse application and register all necessary services.
@@ -19,16 +19,18 @@ $app = new Emberfuse\Base\Application(
 /*
  * Load application routes.
  */
-$app->getRouter()->loadRoutes(dirname(__DIR__ . '/routes.php'));
+$app->getRouter()->loadRoutes(function ($router) {
+    require dirname(__DIR__) . '/routes.php';
+});
 
-/**
+/*
  * New up the HTTP kernel instance.
  *
  * @var \Symfony\Component\HttpKernel\HttpKernelInterface
  */
 $kernel = new Emberfuse\Base\Kernel($app);
 
-/**
+/*
  * Handle/Capture an incoming HTTP request.
  *
  * @var \Symfony\Component\HttpFoundation\Response
