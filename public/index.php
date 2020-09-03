@@ -1,5 +1,10 @@
 <?php
 
+use Emberfuse\Base\Kernel;
+use Emberfuse\Base\Application;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+
 /**
  * Emberfuse - A simple PHP micro framework.
  *
@@ -12,7 +17,7 @@ require dirname(__DIR__) . '/vendor/autoload.php';
  *
  * @var \Emberfuse\Base\Contracts\ApplicationInterface
  */
-$app = new Emberfuse\Base\Application(
+$app = new Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
 
@@ -28,7 +33,7 @@ $app->getRouter()->loadRoutes(function ($router) {
  *
  * @var \Symfony\Component\HttpKernel\HttpKernelInterface
  */
-$kernel = new Emberfuse\Base\Kernel($app);
+$kernel = new Kernel($app);
 
 /*
  * Handle/Capture an incoming HTTP request.
@@ -36,7 +41,9 @@ $kernel = new Emberfuse\Base\Kernel($app);
  * @var \Symfony\Component\HttpFoundation\Response
  */
 $response = $kernel->handle(
-    Symfony\Component\HttpFoundation\Request::createFromGlobals()
+    Request::createFromGlobals(),
+    HttpKernelInterface::MASTER_REQUEST,
+    getenv('APP_DEBUG')
 );
 
 /*
